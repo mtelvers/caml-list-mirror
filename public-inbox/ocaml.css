@@ -1,0 +1,197 @@
+/*
+ * inbox.ci.dev: public-inbox styled after ocaml.org.
+ *
+ * public-inbox inlines this after its built-in
+ *   pre{white-space:pre-wrap}*{font-size:100%;font-family:monospace}
+ * Because that rule uses `*`, fonts do not inherit: set them per element.
+ * public-inbox ignores any file containing the word "important" after "!",
+ * so never use it here (not even in a comment).
+ *
+ * Palette from ocaml.org's Tailwind theme (light / dark):
+ *   primary #D54000 / #C24F1E   primary_dark #842800
+ *   title   #111827             content #555659
+ *   sand    #FAF8F3             secondary #2B7866 / #00838A
+ *   tertiary #3882B7 / #007AD0  dark background #121212, card #1C1C1C,
+ *   navigation #070707, card_hover / code_window #2B2A2A
+ */
+
+:root {
+	--bg: #FAF8F3;
+	--card: #FFFFFF;
+	--nav: #FFFFFF;
+	--border: #E5E7EB;
+	--text: #111827;
+	--muted: #555659;
+	--primary: #D54000;
+	--primary-hover: #842800;
+	--secondary: #2B7866;
+	--tertiary: #3882B7;
+	--del: #B91C1C;
+	--input-bg: #FFFFFF;
+	--sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+		"Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+	--mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+		Consolas, "Liberation Mono", "Courier New", monospace;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #121212;
+		--card: #1C1C1C;
+		--nav: #070707;
+		--border: #2B2A2A;
+		--text: #E5E7EB;
+		--muted: #9CA3AF;
+		--primary: #F36528;
+		--primary-hover: #FF8A57;
+		--secondary: #2BB3A3;
+		--tertiary: #4FA3E0;
+		--del: #F87171;
+		--input-bg: #121212;
+	}
+}
+
+html { background: var(--bg); }
+
+body {
+	background: var(--bg);
+	color: var(--text);
+	max-width: 76rem;
+	margin: 0 auto;
+	padding: 0 1.5rem 3rem;
+	line-height: 1.6;
+}
+
+pre, pre * {
+	font-family: var(--mono);
+	color: var(--text);
+}
+
+pre { font-size: 0.875rem; }
+
+/* Header: the first form holds the list title, search box and help links. */
+body > form:first-child {
+	background: var(--nav);
+	/* full-bleed band and bottom rule while body stays centred */
+	box-shadow: 0 0 0 100vmax var(--nav), 0 1px 0 100vmax var(--border);
+	clip-path: inset(0 -100vmax -1px);
+	margin: 0 0 1.5rem;
+	padding: 1rem 0;
+}
+
+body > form:first-child pre {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+	box-shadow: none;
+	font-family: var(--sans);
+	font-size: 0.9375rem;
+	color: var(--muted);
+	line-height: 2;
+}
+
+body > form:first-child pre a {
+	font-family: var(--sans);
+	color: var(--muted);
+}
+
+body > form:first-child pre a:hover { color: var(--primary); }
+
+/* list name: a link on most pages, plain <b> on the index itself */
+body > form:first-child pre > a:first-child,
+body > form:first-child pre > a:first-child b,
+body > form:first-child pre > b:first-child {
+	font-family: var(--sans);
+	font-size: 1.25rem;
+	font-weight: 700;
+	color: var(--primary);
+	letter-spacing: -0.01em;
+}
+
+/* Content blocks render as cards on the sand background. */
+body > pre {
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 0.75rem;
+	padding: 1.25rem 1.5rem;
+	margin: 0 0 1.5rem;
+	overflow-x: auto;
+	box-shadow: 0 1px 2px rgba(17, 24, 39, 0.04);
+}
+
+hr { display: none; }
+
+/* Links */
+a, pre a { color: var(--primary); text-decoration: none; }
+a:visited, pre a:visited { color: var(--primary-hover); }
+a:hover, pre a:hover { text-decoration: underline; }
+b, pre b { font-weight: 600; }
+
+/* Search box and buttons, like ocaml.org's inputs and .btn */
+input, select, textarea {
+	font-family: var(--sans);
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	color: var(--text);
+}
+
+input[type=text], input[name=q] {
+	background: var(--input-bg);
+	border: 1px solid var(--border);
+	border-radius: 0.5rem;
+	padding: 0.4rem 0.75rem;
+	width: min(28rem, 60vw);
+	vertical-align: middle;
+}
+
+input[type=text]:focus, input[name=q]:focus {
+	outline: 2px solid var(--primary);
+	outline-offset: 1px;
+	border-color: var(--primary);
+}
+
+input[type=submit], button {
+	background: var(--primary);
+	color: #FFFFFF;
+	border: 0;
+	border-radius: 0.5rem;
+	padding: 0.4rem 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+input[type=submit]:hover, button:hover { background: var(--primary-hover); }
+
+/* secondary buttons (search page mbox.gz downloads), like ocaml.org .btn-outline */
+form#d input[type=submit] {
+	background: transparent;
+	color: var(--primary);
+	border: 1px solid var(--primary);
+	padding: 0.2rem 0.75rem;
+	font-size: 0.875rem;
+}
+
+form#d input[type=submit]:hover { background: var(--primary); color: #FFFFFF; }
+
+/* Mail content: quoted text, diffs, highlighted code */
+.q, pre .q { color: var(--secondary); }
+.add, pre .add { color: var(--secondary); }
+.del, pre .del { color: var(--del); }
+.head, pre .head { color: var(--text); font-weight: 600; }
+.hunk, pre .hunk { color: var(--tertiary); }
+
+.hl.num, .hl.str, .hl.pps { color: var(--primary); }
+.hl.esc, .hl.ppc { color: var(--tertiary); }
+.hl.slc, .hl.com { color: var(--muted); font-style: italic; }
+.hl.kwa, .hl.kwc { color: var(--tertiary); font-weight: 600; }
+.hl.kwb { color: var(--secondary); }
+
+@media (max-width: 40rem) {
+	body { padding: 0 0.75rem 2rem; }
+	body > pre { padding: 0.75rem; border-radius: 0.5rem; }
+	pre { font-size: 0.8125rem; }
+	input[type=text], input[name=q] { width: 55vw; }
+}

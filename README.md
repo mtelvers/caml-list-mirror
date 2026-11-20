@@ -10,6 +10,10 @@ Services (`docker-compose.yml`):
   `public-inbox/config`, not in git) and appends new mail to `caml-list.git`. Mail is
   pulled; nothing is delivered to this host.
 - `public-inbox-httpd` serves the archive on 8080 (internal only).
+- The web UI is styled after ocaml.org by `public-inbox/ocaml.css` (light and
+  dark), baked into the image and enabled by `css =` in `[publicinbox]` of
+  `public-inbox/config`. public-inbox ignores a stylesheet that uses
+  `!important`.
 - `caddy` terminates TLS for inbox.ci.dev and redirects v2.ocaml.org to
   ocaml.org.
 

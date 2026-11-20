@@ -20,5 +20,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY config /root/.public-inbox/config
+COPY ocaml.css /root/.public-inbox/ocaml.css
 COPY netrc /root/.netrc
 RUN chmod 600 /root/.netrc

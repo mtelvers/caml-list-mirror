@@ -2,6 +2,7 @@
     spamcheck = none
 
 [publicinbox]
+    css = /root/.public-inbox/ocaml.css
     wwwlisting = all
 
 [publicinbox "caml-list"]
