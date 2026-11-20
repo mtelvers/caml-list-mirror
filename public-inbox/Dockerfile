@@ -1,37 +1,24 @@
-FROM debian:bullseye-backports
+FROM debian:trixie
 
-MAINTAINER Nicolás Ojeda Bär <n.oje.bar@gmail.com>
-
-RUN echo "postfix postfix/main_mailer_type string Internet site" > preseed.txt && \
-    echo "postfix postfix/mailname string inbox.ocaml.org" >> preseed.txt && \
-    debconf-set-selections preseed.txt
-
-RUN DEBIAN_FRONTEND=noninteractive \
-    apt-get update && \
-    apt-get -y install \
-    make \
-    libtimedate-perl \
-    libplack-middleware-reverseproxy-perl \
-    liblinux-inotify2-perl \
-    public-inbox \
-    postfix \
-    sudo
-
-RUN echo "nobody ALL=(root) NOPASSWD:SETENV:/usr/bin/public-inbox-mda" >> /etc/sudoers.d/nobody
-
-ADD mda.sh /mda.sh
-
-RUN chmod +x /mda.sh
-
-RUN postconf -e "mydestination = inbox.ocaml.org, localhost, localhost.localdomain"
-RUN postconf -e "inet_interfaces = all"
-RUN postconf -e "maillog_file = /dev/stdout"
-
-ADD aliases /etc/aliases
-
-RUN postalias /etc/aliases
+# public-inbox-watch (IMAP -> caml-list.git) and public-inbox-httpd.
+# Mail is pulled over IMAPS; no MTA is needed.
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -y install --no-install-recommends \
+      ca-certificates \
+      public-inbox \
+      libdbd-sqlite3-perl \
+      libsearch-xapian-perl \
+      xapian-tools \
+      libmail-imapclient-perl \
+      libio-socket-ssl-perl \
+      liblinux-inotify2-perl \
+      libplack-perl \
+      libplack-middleware-reverseproxy-perl \
+      libtimedate-perl \
+      libemail-address-xs-perl \
+      libinline-c-perl && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY config /root/.public-inbox/config
 COPY netrc /root/.netrc
 RUN chmod 600 /root/.netrc
-
