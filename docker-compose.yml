@@ -5,19 +5,24 @@ services:
     restart: always
     expose:
       - "8080"
-    ports:
-      - "8080:8080"
     volumes:
       - ./caml-list.git:/root/caml-list.git:ro
     command: public-inbox-httpd
 
-  public-inbox-mda:
+  public-inbox-watch:
     build: public-inbox
     restart: always
-    expose:
-      - 25
-    ports:
-      - "25:25"
     volumes:
       - ./caml-list.git:/root/caml-list.git:rw
-    command: postfix start-fg
+    command: public-inbox-watch
+
+  caddy:
+    image: caddy
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config

@@ -1,14 +1,28 @@
-# A caml-list mirror using public-inbox
+# inbox.ci.dev: a caml-list mirror using public-inbox
 
-Deployment instructions
------------------------
+Serves https://inbox.ci.dev/caml-list. The archive itself is
+https://github.com/mtelvers/caml-list (branch `master`); a GitHub Action on
+that repo's `workflow` branch syncs it from inbox.ci.dev every 6 hours.
 
-`make deploy`, or:
+Services (`docker-compose.yml`):
 
-1. `git clone https://github.com/nojb/caml-list-mirror`
+- `public-inbox-watch` follows the list mailbox over IMAPS (see `watch` in
+  `public-inbox/config`, not in git) and appends new mail to `caml-list.git`. Mail is
+  pulled; nothing is delivered to this host.
+- `public-inbox-httpd` serves the archive on 8080 (internal only).
+- `caddy` terminates TLS for inbox.ci.dev and redirects v2.ocaml.org to
+  ocaml.org.
 
-2. `cd caml-list-mirror && git clone -b master https://github.com/nojb/caml-list`
+Deployment
+----------
 
-3. `cd caml-list-mirror && docker-compose up`.
-
-The HTTP server listens on port 8080 and the Postfix server on port 25.
+1. `git clone https://github.com/mtelvers/caml-list-mirror && cd caml-list-mirror`
+2. Copy `public-inbox/config.example` to `public-inbox/config` and set the
+   real IMAP user/host in `watch`; put the IMAP credentials in
+   `public-inbox/netrc`. Neither file is in git (the image
+   build copies it to `/root/.netrc`).
+3. Either rsync an existing `caml-list.git` (keeps the public-inbox index
+   under `caml-list.git/public-inbox/`), or let `make deploy` clone it from
+   GitHub and then run `public-inbox-index` inside the container.
+4. Optionally copy `caddy_data/` across to keep the existing certificates.
+5. `make deploy` (clones/fetches `caml-list.git`, then `docker compose up -d`).

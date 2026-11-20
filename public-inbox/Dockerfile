@@ -32,3 +32,6 @@ ADD aliases /etc/aliases
 RUN postalias /etc/aliases
 
 COPY config /root/.public-inbox/config
+COPY netrc /root/.netrc
+RUN chmod 600 /root/.netrc
+

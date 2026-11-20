@@ -1,9 +1,13 @@
 [publicinboxmda]
     spamcheck = none
 
+[publicinbox]
+    wwwlisting = all
+
 [publicinbox "caml-list"]
-    mainrepo = /root/caml-list.git
+    inboxdir = /root/caml-list.git
     address = caml-list@inria.fr
-    url = https://inbox.ocaml.org/caml-list
+    url = https://inbox.ci.dev/caml-list
     listid = caml-list.inria.fr
     filter = PublicInbox::Filter::Mirror
+    watch = imaps://USER@IMAP-HOST/INBOX

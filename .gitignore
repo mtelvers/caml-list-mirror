@@ -1,0 +1,11 @@
+# Archive (cloned/rsynced separately)
+/caml-list.git/
+# Caddy state (certificates)
+/caddy_data/
+/caddy_config/
+# Mailbox credentials: keep private, copy by hand
+/public-inbox/netrc
+/public-inbox/fetchmailrc
+/public-inbox/procmailrc
+*.pre-*
+/public-inbox/config

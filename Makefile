@@ -16,8 +16,8 @@ process:
 
 deploy:
 	if ! [ -d caml-list.git ]; then \
-	  git clone -b master --bare https://github.com/nojb/caml-list.git; \
+	  git clone -b master --bare https://github.com/mtelvers/caml-list.git; \
 	else \
 	  git -C caml-list.git fetch; \
 	fi
-	docker-compose up
+	docker compose up -d
