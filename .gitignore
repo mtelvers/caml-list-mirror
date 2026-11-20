@@ -9,3 +9,5 @@
 /public-inbox/procmailrc
 *.pre-*
 /public-inbox/config
+# public-inbox-watch IMAP sync state (imap.sqlite3)
+/watch-state/

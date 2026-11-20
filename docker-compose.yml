@@ -14,6 +14,7 @@ services:
     restart: always
     volumes:
       - ./caml-list.git:/root/caml-list.git:rw
+      - ./watch-state:/root/.local/share/public-inbox
     command: public-inbox-watch
 
   caddy:

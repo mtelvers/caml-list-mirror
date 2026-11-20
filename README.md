@@ -24,5 +24,8 @@ Deployment
 3. Either rsync an existing `caml-list.git` (keeps the public-inbox index
    under `caml-list.git/public-inbox/`), or let `make deploy` clone it from
    GitHub and then run `public-inbox-index` inside the container.
-4. Optionally copy `caddy_data/` across to keep the existing certificates.
+4. Copy `watch-state/imap.sqlite3` from the old host (public-inbox-watch's
+   record of which IMAP UIDs it has already imported; without it every
+   message in the mailbox is fetched again). Optionally copy `caddy_data/`
+   to keep the existing certificates.
 5. `make deploy` (clones/fetches `caml-list.git`, then `docker compose up -d`).
